@@ -1,0 +1,20 @@
+{
+    "name": "cuahanglaptop",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "sass": "sass scss: assets/css -w",
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "devDependencies": {
+        "@prettier/plugin-php": "^0.26.0",
+        "prettier": "^3.9.10"
+    }
+}

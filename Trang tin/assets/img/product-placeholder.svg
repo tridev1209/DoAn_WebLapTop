@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-labelledby="title description">
+  <title id="title">Ảnh laptop đang cập nhật</title>
+  <desc id="description">Hình minh họa một máy tính xách tay</desc>
+  <rect width="640" height="480" fill="#f1f3f5"/>
+  <rect x="145" y="92" width="350" height="235" rx="14" fill="#343a40"/>
+  <rect x="160" y="107" width="320" height="205" rx="5" fill="#dee2e6"/>
+  <path d="M95 345h450l42 40c8 8 2 21-10 21H63c-12 0-18-13-10-21l42-40Z" fill="#6c757d"/>
+  <path d="M254 345h132l18 27H236l18-27Z" fill="#adb5bd"/>
+  <text x="320" y="228" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#6c757d">LaptopShop</text>
+</svg>
