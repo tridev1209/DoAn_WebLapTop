@@ -31,6 +31,13 @@ if (!function_exists('resolveProductImage')) {
         if ($normalizedPath !== '') {
             $candidates[] = $normalizedPath;
             $candidates[] = 'assets/img/' . basename($normalizedPath);
+
+            if (pathinfo($normalizedPath, PATHINFO_EXTENSION) === '') {
+                foreach (['png', 'jpg', 'jpeg', 'webp', 'gif'] as $extension) {
+                    $candidates[] = $normalizedPath . '.' . $extension;
+                    $candidates[] = 'assets/img/' . basename($normalizedPath) . '.' . $extension;
+                }
+            }
         }
 
         $safeProductName = basename(trim($productName ?? ''));
@@ -107,7 +114,7 @@ function loadSharedPageData(?PDO $pdo): array
         'categoryHighlights' => []
     ];
 
-    if (!$pdo instanceof PDO) {
+    if (!($pdo instanceof PDO)) {
         return $data;
     }
 
@@ -161,7 +168,7 @@ function csrfToken(): string
 
 function isValidCsrfToken(?string $token): bool
 {
-    return isset($_SESSION['csrf_token'])
-        && is_string($token)
-        && hash_equals((string) $_SESSION['csrf_token'], $token);
+    return isset($_SESSION['csrf_token']) &&
+        is_string($token) &&
+        hash_equals((string) $_SESSION['csrf_token'], $token);
 }

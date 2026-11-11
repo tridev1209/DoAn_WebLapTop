@@ -266,7 +266,7 @@ CREATE TABLE tbl_anh_san_pham (
 ) ENGINE=InnoDB;
 INSERT INTO tbl_anh_san_pham(id_san_pham, duong_dan_anh,thu_tu_hien_thi) VALUES
     (14, 'Acer Nitro V 15 (1).jpg',1),
-    (14, 'Acer Nitro V 15 (2)',2);
+    (14, 'Acer Nitro V 15 (2).jpg',2);
 SELECT * FROM tbl_sanpham;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

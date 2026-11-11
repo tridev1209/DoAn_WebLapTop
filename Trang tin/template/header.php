@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../config/auth.php';
+
 $keyword = $keyword ?? '';
 $brandId = $brandId ?? null;
 $categoryId = $categoryId ?? null;
@@ -13,6 +15,7 @@ $pageDescription =
     'LaptopShop - laptop chính hãng dành cho học tập, văn phòng, đồ họa và gaming.';
 $mainCssPath = __DIR__ . '/../assets/css/main.css';
 $mainCssVersion = is_file($mainCssPath) ? (string) filemtime($mainCssPath) : '1';
+$authUser = authCurrentUser();
 
 if (!function_exists('escape')) {
     function escape(?string $value): string
@@ -95,10 +98,52 @@ if (!function_exists('escape')) {
             <span class="header-action__text">Giỏ hàng</span>
           </a>
 
-          <a href="dang-nhap.php" class="header-action">
-            <span class="header-action__icon"><i class="bi bi-person"></i></span>
-            <span class="header-action__text">Đăng nhập</span>
-          </a>
+          <?php if ($authUser === null): ?>
+            <button
+              type="button"
+              class="header-action header-action--button"
+              data-bs-toggle="modal"
+              data-bs-target="#login-modal"
+              data-open-login
+              aria-label="Mở hộp thoại đăng nhập"
+            >
+              <span class="header-action__icon"><i class="bi bi-person"></i></span>
+              <span class="header-action__text">Đăng nhập</span>
+            </button>
+          <?php else: ?>
+            <div class="dropdown">
+              <button
+                type="button"
+                class="header-action header-action--button dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span class="header-action__icon"><i class="bi bi-person-check"></i></span>
+                <span class="header-action__text"><?= escape((string) $authUser['name']) ?></span>
+              </button>
+              <div class="dropdown-menu dropdown-menu-end auth-user-menu">
+                <div class="auth-user-menu__identity">
+                  <strong><?= escape((string) $authUser['name']) ?></strong>
+                  <span><?= escape((string) $authUser['email']) ?></span>
+                </div>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="tai-khoan.php">
+                  <i class="bi bi-person"></i> Tài khoản của tôi
+                </a>
+                <a class="dropdown-item" href="don-hang-cua-toi.php">
+                  <i class="bi bi-bag-check"></i> Đơn hàng của tôi
+                </a>
+                <div class="dropdown-divider"></div>
+                <form action="dang-xuat.php" method="post">
+                  <input type="hidden" name="csrf_token" value="<?= escape(csrfToken()) ?>" />
+                  <input type="hidden" name="return_to" value="<?= escape(
+                      $_SERVER['REQUEST_URI'] ?? 'index.php'
+                  ) ?>" />
+                  <button class="dropdown-item" type="submit"><i class="bi bi-box-arrow-right"></i> Đăng xuất</button>
+                </form>
+              </div>
+            </div>
+          <?php endif; ?>
         </div>
       </div>
     </header>
@@ -233,4 +278,6 @@ if (!function_exists('escape')) {
         </div>
       </div>
     <?php endif; ?>
+
+    <?php require __DIR__ . '/login-modal.php'; ?>
 

@@ -118,7 +118,7 @@ try {
     $pdo = getDatabaseConnection();
 } catch (Throwable $exception) {
     error_log($exception->getMessage());
-    $databaseError = 'Không kết nối được MySQL: ' . $exception->getMessage();
+    $databaseError = 'Không thể kết nối cơ sở dữ liệu. Vui lòng kiểm tra lại dịch vụ MySQL.';
 }
 
 if ($pdo instanceof PDO) {
@@ -272,7 +272,7 @@ if ($pdo instanceof PDO) {
         }
     } catch (Throwable $exception) {
         error_log($exception->getMessage());
-        $databaseError = 'Không đọc được bảng sản phẩm: ' . $exception->getMessage();
+        $databaseError = 'Không thể tải danh sách sản phẩm lúc này. Vui lòng thử lại sau.';
     }
 }
 
