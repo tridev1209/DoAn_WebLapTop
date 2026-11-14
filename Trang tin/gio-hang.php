@@ -64,7 +64,7 @@ if ($action === 'add' && $requestMethod === 'GET') {
 if ($requestMethod === 'POST') {
     if (!isValidCsrfToken($_POST['csrf_token'] ?? null)) {
         $cartError = 'Phiên làm việc đã hết hạn. Vui lòng thử lại.';
-    } elseif ($action === 'add') {
+    } elseif ($action === 'add' || $action === 'buy_now') {
         $productId = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT) ?: 0;
         $quantity = max(1, (int) ($_POST['quantity'] ?? 1));
         $stock = cartProductStock($pdo, $productId);
@@ -74,7 +74,10 @@ if ($requestMethod === 'POST') {
                 $stock,
                 (int) ($_SESSION['cart'][$productId] ?? 0) + $quantity
             );
-            header('Location: gio-hang.php?added=1');
+            $redirect = $action === 'buy_now'
+                ? 'gio-hang.php?buy_now=' . $productId
+                : 'gio-hang.php?added=1';
+            header('Location: ' . $redirect);
             exit();
         }
 
@@ -106,7 +109,11 @@ if ($requestMethod === 'POST') {
     }
 }
 
-if (isset($_GET['added'])) {
+$buyNowProductId = filter_input(INPUT_GET, 'buy_now', FILTER_VALIDATE_INT) ?: 0;
+
+if ($buyNowProductId > 0) {
+    $cartMessage = 'Sản phẩm đã sẵn sàng. Vui lòng kiểm tra và tiếp tục đặt hàng.';
+} elseif (isset($_GET['added'])) {
     $cartMessage = 'Đã thêm sản phẩm vào giỏ hàng.';
 } elseif (isset($_GET['updated'])) {
     $cartMessage = 'Đã cập nhật số lượng sản phẩm.';
@@ -349,6 +356,12 @@ require __DIR__ . '/template/header.php';
         <i class="bi bi-database-exclamation me-2"></i><?= escape($databaseError) ?>
       </div>
     <?php endif; ?>
+    <?php if ($cartMessage !== null): ?>
+      <div class="alert alert-success alert-dismissible fade show" role="status">
+        <i class="bi bi-check-circle-fill me-2"></i><?= escape($cartMessage) ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+      </div>
+    <?php endif; ?>
 
     <?php if ($cartItems === []): ?>
       <!-- Trạng thái giỏ hàng trống -->
@@ -407,7 +420,9 @@ require __DIR__ . '/template/header.php';
                       name="selected_ids[]"
                       value="<?= (int) $item['IdSanPham'] ?>"
                       form="checkout-form"
-                        checked 
+                        <?= $buyNowProductId === 0 || $buyNowProductId === (int) $item['IdSanPham']
+                            ? 'checked'
+                            : '' ?>
                         aria-label="Chọn sản phẩm này" 
                         data-original-price="<?= (float) $item['OriginalLineTotal'] ?>"
                         data-final-price="<?= (float) $item['LineTotal'] ?>"

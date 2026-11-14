@@ -99,6 +99,7 @@ $keyword = trim((string) ($_GET['keyword'] ?? ''));
 $brandId = filter_input(INPUT_GET, 'brand', FILTER_VALIDATE_INT) ?: null;
 $categoryId = filter_input(INPUT_GET, 'category', FILTER_VALIDATE_INT) ?: null;
 $priceRange = (string) ($_GET['price'] ?? '');
+$saleOnly = (string) ($_GET['sale'] ?? '') === '1';
 $allowedPriceRanges = ['under-15', '15-20', 'over-20'];
 
 if (!in_array($priceRange, $allowedPriceRanges, true)) {
@@ -202,9 +203,15 @@ if ($pdo instanceof PDO) {
             $sql .= ' AND sp.DonGia > 20000000';
         }
 
-        $sql .= $hasSales
+        if ($saleOnly) {
+            $sql .= ' AND sp.TiLeGiamGia > 0';
+        }
+
+        $sql .= $saleOnly
+            ? ' ORDER BY sp.TiLeGiamGia DESC, sp.LuotXem DESC, sp.IdSanPham DESC LIMIT 12'
+            : ($hasSales
             ? ' ORDER BY DaBan DESC, sp.LuotXem DESC, sp.IdSanPham DESC LIMIT 12'
-            : ' ORDER BY sp.LuotXem DESC, sp.IdSanPham DESC LIMIT 12';
+            : ' ORDER BY sp.LuotXem DESC, sp.IdSanPham DESC LIMIT 12');
 
         $statement = $pdo->prepare($sql);
         $statement->execute($params);
@@ -227,7 +234,7 @@ if ($pdo instanceof PDO) {
                 )
                 ->fetchAll();
 
-            if ($keyword === '' && $brandId === null && $categoryId === null && $priceRange === '') {
+            if ($keyword === '' && $brandId === null && $categoryId === null && $priceRange === '' && !$saleOnly) {
                 $groupOrder = $hasSales
                     ? 'DaBan DESC, sp.LuotXem DESC, sp.IdSanPham DESC'
                     : 'sp.LuotXem DESC, sp.IdSanPham DESC';
@@ -302,6 +309,20 @@ foreach ($_SESSION['cart'] ?? [] as $cartItem) {
               <i class="bi bi-laptop"></i>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section class="promo-banner-section" aria-label="Khuyến mãi nổi bật">
+        <div class="container">
+          <a class="promo-banner" href="index.php?sale=1#products">
+            <span class="promo-banner__icon"><i class="bi bi-lightning-charge-fill"></i></span>
+            <span class="promo-banner__content">
+              <small>Ưu đãi đang diễn ra</small>
+              <strong>Săn laptop giảm giá — chọn máy tốt, tiết kiệm hơn</strong>
+              <span>Xem các sản phẩm có mức giảm cao nhất tại LaptopShop</span>
+            </span>
+            <span class="promo-banner__action">Khám phá ngay <i class="bi bi-arrow-right"></i></span>
+          </a>
         </div>
       </section>
 
@@ -387,13 +408,13 @@ foreach ($_SESSION['cart'] ?? [] as $cartItem) {
         <div class="container">
           <div class="section-heading">
             <div>
-              <span class="section-heading__eyebrow">Gợi ý dành cho bạn</span>
-              <h2><?= $keyword !== '' ? 'Kết quả tìm kiếm' : 'Laptop nổi bật' ?></h2>
+              <span class="section-heading__eyebrow"><?= $saleOnly ? 'Tiết kiệm hôm nay' : 'Gợi ý dành cho bạn' ?></span>
+              <h2><?= $saleOnly ? 'Laptop đang giảm giá' : ($keyword !== '' ? 'Kết quả tìm kiếm' : 'Laptop nổi bật') ?></h2>
               <?php if ($keyword !== ''): ?>
                 <p>Kết quả cho từ khóa “<?= escape($keyword) ?>”</p>
               <?php endif; ?>
             </div>
-            <?php if ($keyword !== '' || $brandId !== null || $categoryId !== null || $priceRange !== ''): ?>
+            <?php if ($keyword !== '' || $brandId !== null || $categoryId !== null || $priceRange !== '' || $saleOnly): ?>
               <a class="btn btn-outline-secondary" href="index.php#products">
                 <i class="bi bi-x-lg"></i> Xóa bộ lọc
               </a>

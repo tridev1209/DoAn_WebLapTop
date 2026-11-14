@@ -264,7 +264,6 @@ require __DIR__ . '/template/header.php';
           <?php if ($stock > 0): ?>
             <form class="product-detail__buy" action="gio-hang.php" method="post">
               <input type="hidden" name="csrf_token" value="<?= escape(csrfToken()) ?>" />
-              <input type="hidden" name="action" value="add" />
               <input type="hidden" name="id" value="<?= (int) $product['IdSanPham'] ?>" />
               
               <!-- Phần chọn số lượng có nút bấm - / + -->
@@ -277,10 +276,14 @@ require __DIR__ . '/template/header.php';
                 </div>
               </div>
 
-              <!-- Nút thêm vào giỏ hàng full width -->
-              <button class="btn product-detail__cart" type="submit">
-                <i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
-              </button>
+              <div class="product-detail__actions">
+                <button class="btn product-detail__cart" type="submit" name="action" value="add">
+                  <i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
+                </button>
+                <button class="btn product-detail__buy-now" type="submit" name="action" value="buy_now">
+                  <i class="bi bi-lightning-charge-fill"></i> Mua ngay
+                </button>
+              </div>
             </form>
           <?php endif; ?>
 

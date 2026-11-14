@@ -13,17 +13,17 @@
           <div class="col-6 col-lg-3">
             <h2 class="footer__title">Hỗ trợ khách hàng</h2>
             <ul class="footer__list">
-              <li><a href="lien-he.php">Liên hệ</a></li>
-              <li><a href="#">Chính sách bảo hành</a></li>
-              <li><a href="#">Hướng dẫn mua hàng</a></li>
+              <li><a href="ho-tro.php#lien-he">Liên hệ</a></li>
+              <li><a href="ho-tro.php#bao-hanh">Chính sách bảo hành</a></li>
+              <li><a href="ho-tro.php#huong-dan">Hướng dẫn mua hàng</a></li>
             </ul>
           </div>
           <div class="col-6 col-lg-3">
             <h2 class="footer__title">Về LaptopShop</h2>
             <ul class="footer__list">
               <li><a href="gioi-thieu.php">Giới thiệu</a></li>
-              <li><a href="#">Hệ thống cửa hàng</a></li>
-              <li><a href="#">Điều khoản sử dụng</a></li>
+              <li><a href="gioi-thieu.php#gia-tri">Giá trị cam kết</a></li>
+              <li><a href="ho-tro.php#cau-hoi">Câu hỏi thường gặp</a></li>
             </ul>
           </div>
           <div class="col-12 col-lg-2">

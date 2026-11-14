@@ -180,7 +180,7 @@ INSERT INTO tbl_sanpham(MaSanPham, TenSanPham, IdNhaSanXuat, MaDanhMuc, HinhAnh,
 -- Bảng giỏ hàng
 CREATE TABLE tbl_giohang (
     MaGioHang INT AUTO_INCREMENT PRIMARY KEY,
-    MaNguoiDung INT NOT NULL UNIQUE,
+    MaNguoiDung INT NOT NULL,
     MaSanPham INT NOT NULL UNIQUE,
     SoLuong INT NOT NULL DEFAULT 1,
     CONSTRAINT fk_giohang_nguoidung

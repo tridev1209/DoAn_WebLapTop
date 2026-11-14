@@ -5,6 +5,8 @@ $keyword = $keyword ?? '';
 $brandId = $brandId ?? null;
 $categoryId = $categoryId ?? null;
 $priceRange = $priceRange ?? '';
+$saleOnly = $saleOnly ?? false;
+$currentPage = $currentPage ?? '';
 $brands = $brands ?? [];
 $categories = $categories ?? [];
 $categoryHighlights = $categoryHighlights ?? [];
@@ -74,6 +76,9 @@ if (!function_exists('escape')) {
           <?php endif; ?>
           <?php if ($priceRange !== ''): ?>
             <input type="hidden" name="price" value="<?= escape($priceRange) ?>" />
+          <?php endif; ?>
+          <?php if ($saleOnly): ?>
+            <input type="hidden" name="sale" value="1" />
           <?php endif; ?>
           <label class="visually-hidden" for="search-input">Tìm kiếm laptop</label>
           <input
@@ -181,8 +186,15 @@ if (!function_exists('escape')) {
               </li>
             <?php endif; ?>
       
-            <li class="nav-item"><a class="nav-link" href="lien-he.php">Giới thiệu</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Hỗ trợ</a></li>
+            <li class="nav-item">
+              <a class="nav-link <?= $currentPage === 'about' ? 'active' : '' ?>" href="gioi-thieu.php" <?= $currentPage === 'about' ? 'aria-current="page"' : '' ?>>Giới thiệu</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link <?= $currentPage === 'support' ? 'active' : '' ?>" href="ho-tro.php" <?= $currentPage === 'support' ? 'aria-current="page"' : '' ?>>Hỗ trợ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-promo" href="index.php?sale=1#products"><i class="bi bi-lightning-charge-fill"></i> Ưu đãi</a>
+            </li>
           </ul>
 
         
